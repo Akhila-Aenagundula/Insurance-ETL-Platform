@@ -1,0 +1,22 @@
+services:
+  ingestion-service:
+    build:
+      context: ./ingestion-service
+      dockerfile: Dockerfile
+    container_name: insurance-ingestion
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - processing-service
+
+  processing-service:
+    build:
+      context: ./processing-service
+      dockerfile: Dockerfile
+    container_name: insurance-processing
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./data:/app/data
