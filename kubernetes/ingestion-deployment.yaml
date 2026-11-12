@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion
+    spec:
+      containers:
+        - name: ingestion
+          image: insurance-etl-platform-ingestion-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8001
+          volumeMounts:
+            - name: insurance-data
+              mountPath: /app/data
+      volumes:
+        - name: insurance-data
+          persistentVolumeClaim:
+            claimName: insurance-data-pvc

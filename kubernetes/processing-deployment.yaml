@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processing-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: processing
+  template:
+    metadata:
+      labels:
+        app: processing
+    spec:
+      containers:
+        - name: processing
+          image: insurance-etl-platform-processing-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8002
+          volumeMounts:
+            - name: insurance-data
+              mountPath: /app/data
+      volumes:
+        - name: insurance-data
+          persistentVolumeClaim:
+            claimName: insurance-data-pvc
